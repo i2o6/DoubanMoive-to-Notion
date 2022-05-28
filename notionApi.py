@@ -18,7 +18,7 @@
 import requests
 
 # notion基本参数
-token = 'secret_jbAfuHtnPK9dWzE4d2joGFt4adPQRzAgpdTXkGWCzbk'
+token = '你自己的notion的token'
 headers = {
     'Notion-Version': '2022-02-22',
     'Authorization': 'Bearer ' + token,
