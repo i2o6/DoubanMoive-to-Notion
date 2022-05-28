@@ -143,8 +143,8 @@ if __name__ == '__main__':
     }"""
 
     # notion相关配置
-    databaseid = "51bd1bc76f76430fa522585237c94071"
-    rss_movietracker = feedparser.parse("https://www.douban.com/feed/people/148064238/interests")
+    databaseid = "你自己的databaseid"
+    rss_movietracker = feedparser.parse("你的rss订阅链接")
     # pprint.pprint(rss_movietracker)
     #item = rss_movietracker["entries"][1]
 
