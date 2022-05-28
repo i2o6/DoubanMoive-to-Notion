@@ -53,7 +53,7 @@ def film_info1(item):
     comment = re.findall(pattern2, allcomment)[0]
     comment = comment.split("备注: ")[1]
 
-    return title, cover_url, watch_time, movie_url, score, comment
+    return cover_url, watch_time, movie_url, score, comment
 
 def film_info2(movie_url):
     # 目前想改进的有title，类型，导演
