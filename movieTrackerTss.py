@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import notionApi
+import time
 
 
 
@@ -72,23 +73,25 @@ def film_info2(movie_url):
     title = title.find_all('span')
     title = title[0].text + title[1].text
 
+    # 电影名称与年份
+    title = moive_content.find('h1')
+    title = title.find_all('span')
+    title = title[0].text + title[1].text
+
+
     # 基本信息
     base_information = moive_content.find('div', class_='subject clearfix')
     info = base_information.find('div', id='info').text.split('\n')
-    Info = {}
-    for i in info:
-        if len(i) > 1:
-            iifo = i.split(':')
-            Info[iifo[0]] = iifo[1]
-    # print(info)
     info = ','.join(info)
+    # print(info)
     pattern_type = re.compile(r'(?<=类型: )[\u4e00-\u9fa5 /]+', re.S)
     movie_type = re.findall(pattern_type, info)[0].replace(" ", "").split("/")
     # print(movie_type)
     pattern_director = re.compile(r'(?<=导演: )[\u4e00-\u9fa5 /]+', re.I)
     director = re.findall(pattern_director, info)[0].replace(" ", "").split("/")
     # print(director)
-    return movie_type, director
+
+    return title, movie_type, director
 
 # 开始连接notion
 
@@ -103,19 +106,22 @@ if __name__ == '__main__':
     }"""
 
     # notion相关配置
-    databaseid = "你自己的databaseid"
-    rss_movietracker = feedparser.parse("你自己的rss链接")
+    databaseid = "51bd1bc76f76430fa522585237c94071"
+    rss_movietracker = feedparser.parse("https://www.douban.com/feed/people/148064238/interests")
     # pprint.pprint(rss_movietracker)
     #item = rss_movietracker["entries"][1]
 
+    notion_moives = notionApi.DataBase_item_query(databaseid)
+
+
     for item in rss_movietracker["entries"]:
         if "看过" not in item["title"]:
-            break
-        title, cover_url, watch_time, movie_url, score, comment = film_info1(item)
-        rel = notionApi.select_items_form_Databaseid(databaseid, "url", movie_url)
-        if rel is not None:
             continue
-        movie_type, director = film_info2(movie_url)
+        cover_url, watch_time, movie_url, score, comment = film_info1(item)
+        rel = notionApi.select_items_form_Databaseitems(notion_moives, "影片链接", movie_url)
+        if rel:
+            continue
+        title, movie_type, director = film_info2(movie_url)
 
 
         body = {
@@ -136,5 +142,7 @@ if __name__ == '__main__':
 
             }
         }
-        print(body)
+        # print(body)
         notionApi.DataBase_additem(databaseid, body, title)
+        time.sleep(3)
+    
