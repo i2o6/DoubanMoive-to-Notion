@@ -98,16 +98,12 @@ def film_info2(movie_url):
 # 改进：加入重试机制，加入防止重复
 if __name__ == '__main__':
 
-    """    token = "secret_jbAfuHtnPK9dWzE4d2joGFt4adPQRzAgpdTXkGWCzbk"
-    headers = {
-        "Accept": "application/json",
-        "Notion-Version": "2022-02-22",
-        "Authorization": "Bearer " + token
-    }"""
+
 
     # notion相关配置
-    databaseid = "51bd1bc76f76430fa522585237c94071"
-    rss_movietracker = feedparser.parse("https://www.douban.com/feed/people/148064238/interests")
+    # 需要在notionAPI.py中配置notion token
+    databaseid = "你的notion databasedid"
+    rss_movietracker = feedparser.parse("你的豆瓣的个人页面的rss链接")
     # pprint.pprint(rss_movietracker)
     #item = rss_movietracker["entries"][1]
 
