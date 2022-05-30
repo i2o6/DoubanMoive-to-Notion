@@ -15,10 +15,27 @@
 }
 """
 
+"""
+    body = {
+     'properties':{
+          '我是number（这里对应你database的属性名称）':{'type': 'number', 'number': int(数据)},
+          '我是title':{
+                'id': 'title', 'type': 'title', 
+                'title': [{'type': 'text', 'text': {'content': str(数据)}, 'plain_text': str(数据)}]
+            },
+          '我是select': {'type': 'select', 'select': {'name': str(数据)}},
+          '我是date': {'type': 'date', 'date': {'start': str(数据), 'end': None}},
+          '我是Text': {'type': 'rich_text', 'rich_text': [{'type': 'text', 'text': {'content': str(数据)},  'plain_text': str(数据)}]},
+          '我是multi_select': {'type': 'multi_select', 'multi_select': [{'name': str(数据)}, {'name': str(数据)}]}
+          '我是checkbox':{'type': 'checkbox', 'checkbox': bool(数据)}
+     }
+}
+"""
+
 import requests
 
 # notion基本参数
-token = '你自己的notion的token'
+token = '你的notion的token'
 headers = {
     'Notion-Version': '2022-02-22',
     'Authorization': 'Bearer ' + token,
@@ -220,10 +237,11 @@ def body_propertie_input(label, type_x, data):
 # 返回值为列表型数据，该数据符合你的筛选条件的
 def select_items_form_Databaseid(Database_id,label,value):
     items = DataBase_item_query(Database_id)
+    #print(items)
     items_pick = []
 
     for item in items:
-        if item_information_pick(item,label) == value:
+        if item_information_pick(item, label) == value:
             items_pick.append(item)
 
     return items_pick
