@@ -20,8 +20,8 @@ def film_info1(item):
 # 导演
     time = item["published"]
     pattern2 = re.compile(r'(?<=. ).+\d{4}', re.S)  # 匹配时间
-    month_satandard = {'January': '01', 'February': '02', 'March': '03', 'April': '04', 'May': '05', 'June': '06',
-                   'July': '07', 'August': '08', 'September': '09', 'October': 10, 'November': '11', 'December': '12'}
+    month_satandard = {'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05', 'Jun': '06',
+                   'Jul': '07', 'Aug': '08', 'Sep': '09', 'Oct': 10, 'Nov': '11', 'Dec': '12'}
     time = re.findall(pattern2, time)[0]
     time = time.split(" ")
     day = time[0]
