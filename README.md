@@ -1,34 +1,72 @@
-
 ---
-
-# 前言
-本文基于2022-05-28，之后可能会发生一些api之类的改变
+# 一、前言
 ---
+## （一）参考文章
 
-**参考文章**
-[利用Python爬虫+notion API实现在notion中自动收录看过的电影](https://zhuanlan.zhihu.com/p/425067213)
-[notion API命令-个性化再封装](https://zhuanlan.zhihu.com/p/395219868)
 [如何使用python+notion API搭建属于自己的豆瓣观影记录](https://zhuanlan.zhihu.com/p/521182229)
 
-**个人思路**
-通过python将`豆瓣个人页面的观影记录`到`notion`的观影记录页面中，如果再搭配上windows的类似于定时任务的功能，每隔一段时间自动运行一次，就可以实现自动化的豆瓣填写影评，更新到notion中。
+[notion API命令-个性化再封装](https://zhuanlan.zhihu.com/p/395219868)
 
-注意：个人主页只显示最近看过的五部电影
-
-此功能不光可以将豆瓣个人观影记录导入到notion，只要可以通过python导入的都可以，包括博客之类的
-**需要提前准备的东西：**
-1. 有在豆瓣记录观影记录的习惯
-2. notion相对应的电影模板页，[我分享一个自己的在这里](https://best-tank-15d.notion.site/Movie-Tracker-1b086df62e3b4c0fb9a669daff64ba3f)
-3. 电脑上有python,需要安装`feedparser`,`pprint`,`BeautifulSoup`,`re`这些包
-4. 所有代码已经上传到我的[Github仓库](https://github.com/moji111/doubanMoive2Notion)
-5. notion API官网在这里 [Notion API](https://developers.notion.com/)
+[利用Python爬虫+notion API实现在notion中自动收录看过的电影](https://zhuanlan.zhihu.com/p/425067213)
 
 ---
+## （二）介绍
 
-# 一、得到豆瓣观影数据
-在个人主页https://www.douban.com/people/你的豆瓣id/ 
-`你的豆瓣id需要进行替换` 页面右下方会有rss订阅，这个数据是跟着你的信息同步更新的，只要有这个链接就可以获得你最近看过的电影，想看的电影，看的书等等信息。
-![在这里插入图片描述](https://img-blog.csdnimg.cn/12577dc59f3d4c8792ee03f0c2fb69c9.png#pic_center)
+1. 原材料：豆瓣、Notion、Python；
+2. 通过豆瓣个人主页的RSS链接中获得豆瓣账户中的动态标记信息，将其与Notion数据库的接口使用Pycharm进行连接，实现我的“看过”批量记录在Notion上的功能。
+
+*只适用于最近标记过的5部电影的记录，不适用于很久之前的备份*
+
+*改进方案关键词：机器人、自动添加、定时*
+
+效果预览
+![image](https://user-images.githubusercontent.com/54937829/215420347-8cef7e3d-07fb-44bc-81e0-3006770bae21.png)
+
+
+
+
+---
+# 二、主要流程 
+---
+## （一）前期准备
+
+### 1.豆瓣观影数据
+
+在个人主页的页面右下方会有`RSS链接` https://www.douban.com/feed/people/你的豆瓣ID/interests  ❗注意：你的豆瓣ID需要进行替换❗
+
+把这个链接记录在方便下次找到的地方，比如说，在桌面新建一个txt文档，或者把它复制给你的微信文件传输助手。
+---
+### 2.Notion创建新的DataBase并获取DataBaseID
+
+首先可以选择Table
+![创建DataBase](https://user-images.githubusercontent.com/54937829/215414232-f8c3700e-d403-4cc3-b085-4b3fd030be15.png)
+
+接着，新建属性，
+电影名-Title ; 封面-Files & media ; 类型-Multi-select ; 导演-Multi-select ; 评分-Select ; 观看时间-Date ; 影片-URL
+
+后续可以根据自己的偏好进行删减
+
+![create property](https://user-images.githubusercontent.com/54937829/215416190-56d98930-8c5a-4327-985c-4df1072600d6.png)
+![preview](https://user-images.githubusercontent.com/54937829/215416636-7018cc24-05d9-4f9d-9bd6-e8299d29d5dd.png)
+
+最后，记录下这个新建数据库DataBase的ID，点击页面右上角的Share可以看见右下角的Copy link的选项，会得到
+
+https://www.notion.so/1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a?v=3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c ❗注意：你的databaseid需要进行替换❗
+
+这样一个链接，其中1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a是我们需要的databaseid，是一串32个字符的随机字符。
+
+同样的，像前面的RSS链接一样，记录在方便查阅的地方。
+
+[Notion官方的说明是这样的](https://developers.notion.com/docs/working-with-databases)
+
+[参考链接2](https://neverproductive.com/database-id-notion/#:~:text=Notion%20database%20and%20page%20IDs%20are%20the%20unique,every%20database%20has%20one%20of%20those%20unique%20identifiers.)
+---
+
+
+### 3.Notion创建新的integrations
+
+
+---
 经过百度之后，我使用的`pprint`和`feedparser`来处理rss链接信息
 ```python
 import feedparser
@@ -37,10 +75,10 @@ rss_movietracker = feedparser.parse("https://www.douban.com/feed/people/14806423
 pprint.pprint(rss_movietracker)
 ```
 可以看一下大概的输出，是一个类似于json的文件，其中我们需要的电影的信息都在`entries`里面
-![在这里插入图片描述](https://img-blog.csdnimg.cn/464190ec1d814855a118fac8d809af44.png#pic_center)
+
 # 二、处理豆瓣得到的数据
 rss中取得的信息是这样的：如果我们把`rss_movietracker["entries"]`看作一个list，那么这个list当中的每一个item都是我们个人主页（只显示最近看过的）的一个物品，比如看过的每一部电影，想看的每一部电影，看过的每一本图书，所以我们只需要对每个item进行处理，得到我们想要的信息即可。
-![在这里插入图片描述](https://img-blog.csdnimg.cn/68e333df50634f319c89391134182239.png#pic_center)
+
 <center>我的notion观影模板需要的信息</center>
 
 接下来是对每一个item进行处理，`title`, `cover_url`, `score`, `watch_time`, `comment`, `movie_url`都可以在item中拿到，所以我定义了一个函数来得到这些。
