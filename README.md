@@ -5,12 +5,10 @@
 本文基于2022-05-28，之后可能会发生一些api之类的改变
 ---
 
-**感谢**
-本文部分代码来自于知乎
-
+**参考文章**
 [利用Python爬虫+notion API实现在notion中自动收录看过的电影](https://zhuanlan.zhihu.com/p/425067213)
-
 [notion API命令-个性化再封装](https://zhuanlan.zhihu.com/p/395219868)
+[如何使用python+notion API搭建属于自己的豆瓣观影记录](https://zhuanlan.zhihu.com/p/521182229)
 
 **个人思路**
 通过python将`豆瓣个人页面的观影记录`到`notion`的观影记录页面中，如果再搭配上windows的类似于定时任务的功能，每隔一段时间自动运行一次，就可以实现自动化的豆瓣填写影评，更新到notion中。
