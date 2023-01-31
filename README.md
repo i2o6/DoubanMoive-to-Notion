@@ -2,69 +2,89 @@
 # 一、前言
 ---
 
-1. 原材料：豆瓣、Notion、Python；
-2. 通过豆瓣个人主页的RSS链接中获得豆瓣账户中的动态标记信息，将其与Notion数据库的接口使用Pycharm进行连接，实现我的“看过”批量记录在Notion上的功能。
+    1. 原材料：豆瓣、Notion、Python；
+    2. 通过豆瓣个人主页的RSS链接中获得豆瓣账户中的动态标记信息，将其与Notion数据库的接口使用Pycharm进行连接，实现我的“看过”批量记录在Notion上的功能。
 
 *说明：只适用于最近标记过的5部电影的记录，不适用于很久之前的备份*
 
 *改进方案关键词：机器人、自动添加、定时*
 
-效果预览
+
+>效果预览
 
 ![image](https://user-images.githubusercontent.com/54937829/215422244-dbca0064-73eb-4ec3-929f-852f87546865.png)
 ![image](https://user-images.githubusercontent.com/54937829/215422287-774d50cc-7fd5-440a-9dd9-970d2b7bf6b7.png)
 
+
 ---
 # 二、主要流程 
+
 
 ## （一）前期准备
 
 ### 1.豆瓣观影数据
 
-(1) 在个人主页的页面右下方会有RSS链接 
+    (1) 在个人主页的页面右下方会有RSS链接 
 
-`https://www.douban.com/feed/people/你的豆瓣ID/interests`  ❗注意：你的豆瓣ID需要进行替换❗
+    `https://www.douban.com/feed/people/你的豆瓣ID/interests`  
+    ❗注意：你的豆瓣ID需要进行替换❗
 
-(2) 把这个链接记录在方便下次找到的地方，比如说，在桌面新建一个txt文档，或者把它复制给你的微信文件传输助手。
+    (2) 把这个链接记录在方便下次找到的地方，比如说，在桌面新建一个txt文档，或者把它复制给你的微信文件传输助手。
 
 
 ### 2.Notion创建新的DataBase并获取DataBaseID
 
-(1) 可以选择Table
+    (1) 新建一个Table
+
 ![创建DataBase](https://user-images.githubusercontent.com/54937829/215414232-f8c3700e-d403-4cc3-b085-4b3fd030be15.png)
 
-(2) 新建属性
+    (2) 新建属性
 
-电影名-Title ; 封面-Files & media ; 类型-Multi-select ; 导演-Multi-select ; 评分-Select ; 观看时间-Date ; 影片-URL
+电影名 - Title
 
-后续可以根据自己的偏好进行删减
+封面 - Files & media
+
+类型 - Multi-select
+
+导演 - Multi-select
+
+评分 - Select
+
+观看时间 - Date
+
+影片 - URL
+
+*后续可以根据自己的偏好进行删减*
 
 ![create property](https://user-images.githubusercontent.com/54937829/215416190-56d98930-8c5a-4327-985c-4df1072600d6.png)
 ![preview](https://user-images.githubusercontent.com/54937829/215416636-7018cc24-05d9-4f9d-9bd6-e8299d29d5dd.png)
 
-(3) 记录下这个新建数据库DataBase的ID，点击页面右上角的Share可以看见右下角的Copy link的选项，会得到
+    (3)DataBaseID
 
-`https://www.notion.so/1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a?v=3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c` 这样一个链接，
+* 点击页面右上角的Share可以看见右下角的Copy link的选项
 
-其中`1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a`是我们需要的databaseid，是一串32个字符的随机字符。❗注意：你的databaseid需要进行替换❗
+* 会得到`https://www.notion.so/1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a?v=3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c` 这样一个链接
 
-(4) 同样的，像前面的RSS链接一样，记录在方便查阅的地方。
+* 其中`1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a`是我们需要的databaseid，是一串32个字符的随机字符。
 
-[Notion官方的说明是这样的](https://developers.notion.com/docs/working-with-databases)、[参考链接2](https://neverproductive.com/database-id-notion/#:~:text=Notion%20database%20and%20page%20IDs%20are%20the%20unique,every%20database%20has%20one%20of%20those%20unique%20identifiers.)
+    ❗注意：你的databaseid需要进行替换❗
 
-### 3.Notion创建新的integrations并获取token
+* 同样的，像前面的RSS链接一样，记录在方便查阅的地方。
 
-（1）首先进入Notion API官网：[Notion API](https://developers.notion.com/)
+    [Notion的官方说明](https://developers.notion.com/docs/working-with-databases)
+    
+    [参考链接2](https://neverproductive.com/database-id-notion/#:~:text=Notion%20database%20and%20page%20IDs%20are%20the%20unique,every%20database%20has%20one%20of%20those%20unique%20identifiers.)
 
-（2）右上角↗ View my integrations
+### 3.Notion创建新的integrations并获取Token
 
-（3）+ New integration
+* 首先进入Notion API官网：[Notion API](https://developers.notion.com/)
+* 右上角 ↗ View my integrations
+* 选择 + New integration
+* 为这个集成命名，提交Submit
+* Secrets → Internal Integration Token → 复制Token
 
-（4）为这个集成命名，提交Submit
+    ❗注意：`secret_xxxxxxxx` 就是你的token❗ 请记录下来
 
-（5）Secrets→Internal Integration Token→复制token
-
-❗注意：`secret_xxxxxxxx` 就是你的token❗请记录下来
 
 ---
 
@@ -72,11 +92,11 @@
 
 ### 1.main类
 
-1.1 新安装的PyCharm需要安装相应的包：feedparser、bs4、requests等
+    1.1 新安装的PyCharm需要安装相应的包：feedparser、bs4、requests等
 
 安装路径 File -> Settings -> Project:工程项目名 -> Python interpreter -> ➕
 
-1.2 导入库import
+    1.2 导入库import
 
 ```python
 from bs4 import BeautifulSoup
@@ -88,7 +108,7 @@ import time
 import re
 ```
 
-1.3 处理RSS链接
+    1.3 处理RSS链接
 
 ```python
 rss_movietracker = feedparser.parse("https://www.douban.com/feed/people/你的豆瓣ID/interests")
@@ -97,6 +117,7 @@ pprint.pprint(rss_movietracker) #使用pprint美化打印
 
 
 ### 2.Notion Api类
+
 
 详见[知乎@无尾羊：notion API命令-个性化再封装](https://zhuanlan.zhihu.com/p/395219868)
 
