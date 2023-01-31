@@ -114,6 +114,14 @@ import re
 rss_movietracker = feedparser.parse("https://www.douban.com/feed/people/你的豆瓣ID/interests")
 pprint.pprint(rss_movietracker) #使用pprint美化打印进行预览
 ```
+输出的是一个类似于json的文件，其中我们需要的电影的信息都在`entries`里面
+
+>输出预览：
+![1675130569(1)](https://user-images.githubusercontent.com/54937829/215641074-50ac80f2-6cbe-45c6-8c5f-204a50e7b9f7.png)
+
+1.4 处理豆瓣得到的数据
+
+rss中取得的信息是这样的：如果我们把`rss_movietracker["entries"]`看作一个list，那么这个list当中的每一个item都是我们个人主页（只显示最近看过的）的一个物品，比如看过的每一部电影，想看的每一部电影，看过的每一本图书，所以我们只需要对每个item进行处理，得到我们想要的信息即可。
 
 
 ### 2.Notion Api类
@@ -121,11 +129,9 @@ pprint.pprint(rss_movietracker) #使用pprint美化打印进行预览
 
 详见[知乎@无尾羊：notion API命令-个性化再封装](https://zhuanlan.zhihu.com/p/395219868)
 
-输出的是一个类似于json的文件，其中我们需要的电影的信息都在`entries`里面
-1675130569(1).png
-1675130569(1).png
+
 # 二、处理豆瓣得到的数据
-rss中取得的信息是这样的：如果我们把`rss_movietracker["entries"]`看作一个list，那么这个list当中的每一个item都是我们个人主页（只显示最近看过的）的一个物品，比如看过的每一部电影，想看的每一部电影，看过的每一本图书，所以我们只需要对每个item进行处理，得到我们想要的信息即可。
+
 
 <center>我的notion观影模板需要的信息</center>
 
