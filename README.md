@@ -540,15 +540,7 @@ def select_items_form_databaseitems(items, label, value):
 
 # 三、最后
 
-## 参考文章
-
-
-[如何使用python+notion API搭建属于自己的豆瓣观影记录](https://zhuanlan.zhihu.com/p/521182229)
-
-[notion API命令-个性化再封装](https://zhuanlan.zhihu.com/p/395219868)
-
-[利用Python爬虫+notion API实现在notion中自动收录看过的电影](https://zhuanlan.zhihu.com/p/425067213)
-
+## （一）缺陷与改进
 1、此方案只适用于最近标记过的5部电影的记录，不适用于很久之前的备份。如果要把豆瓣里的所有标记都迁移到notion上，目前只有手动添加的办法，如果有友友知道有方法实现自动添加，烦请告诉我一下。
 
 2、我删除了短评的代码，所以无法实现有短评的标记迁移。（因为我本人不怎么写评价，基本只评分，因而也就删去了原文的comment项
@@ -559,4 +551,10 @@ def select_items_form_databaseitems(items, label, value):
 
 4、我还准备加入一个月观影的gallery view，按观影月份分类，可以看看这个月都看了哪些影视剧，进行一个月总结。
 
+## （二）参考文章
 
+[如何使用python+notion API搭建属于自己的豆瓣观影记录](https://zhuanlan.zhihu.com/p/521182229)
+
+[notion API命令-个性化再封装](https://zhuanlan.zhihu.com/p/395219868)
+
+[利用Python爬虫+notion API实现在notion中自动收录看过的电影](https://zhuanlan.zhihu.com/p/425067213)
