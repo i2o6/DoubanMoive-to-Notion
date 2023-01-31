@@ -2,8 +2,8 @@
 # 一、前言
 ---
 
-    1. 原材料：豆瓣、Notion、Python；
-    2. 通过豆瓣个人主页的RSS链接中获得豆瓣账户中的动态标记信息，将其与Notion数据库的接口使用Pycharm进行连接，实现我的“看过”批量记录在Notion上的功能。
+1. 原材料：豆瓣、Notion、Python；
+2. 通过豆瓣个人主页的RSS链接中获得豆瓣账户中的动态标记信息，将其与Notion数据库的接口使用Pycharm进行连接，实现我的“看过”批量记录在Notion上的功能。
 
 *说明：只适用于最近标记过的5部电影的记录，不适用于很久之前的备份*
 
@@ -24,21 +24,21 @@
 
 ### 1.豆瓣观影数据
 
-    (1) 在个人主页的页面右下方会有RSS链接 
+(1) 在个人主页的页面右下方会有RSS链接 
 
-    `https://www.douban.com/feed/people/你的豆瓣ID/interests`  
-    ❗注意：你的豆瓣ID需要进行替换❗
+`https://www.douban.com/feed/people/你的豆瓣ID/interests`  
+❗注意：你的豆瓣ID需要进行替换❗
 
-    (2) 把这个链接记录在方便下次找到的地方，比如说，在桌面新建一个txt文档，或者把它复制给你的微信文件传输助手。
+(2) 把这个链接记录在方便下次找到的地方，比如说，在桌面新建一个txt文档，或者把它复制给你的微信文件传输助手。
 
 
 ### 2.Notion创建新的DataBase并获取DataBaseID
 
-    (1) 新建一个Table
+(1) 新建一个Table
 
 ![创建DataBase](https://user-images.githubusercontent.com/54937829/215414232-f8c3700e-d403-4cc3-b085-4b3fd030be15.png)
 
-    (2) 新建属性
+(2) 新建属性
 
 电影名 - Title
 
@@ -59,7 +59,7 @@
 ![create property](https://user-images.githubusercontent.com/54937829/215416190-56d98930-8c5a-4327-985c-4df1072600d6.png)
 ![preview](https://user-images.githubusercontent.com/54937829/215416636-7018cc24-05d9-4f9d-9bd6-e8299d29d5dd.png)
 
-    (3)DataBaseID
+(3)DataBaseID
 
 * 点击页面右上角的Share可以看见右下角的Copy link的选项
 
@@ -92,11 +92,11 @@
 
 ### 1.main类
 
-    1.1 新安装的PyCharm需要安装相应的包：feedparser、bs4、requests等
+1.1 新安装的PyCharm需要安装相应的包：feedparser、bs4、requests等
 
 安装路径 File -> Settings -> Project:工程项目名 -> Python interpreter -> ➕
 
-    1.2 导入库import
+1.2 导入库import
 
 ```python
 from bs4 import BeautifulSoup
@@ -108,11 +108,11 @@ import time
 import re
 ```
 
-    1.3 处理RSS链接
+1.3 处理RSS链接
 
 ```python
 rss_movietracker = feedparser.parse("https://www.douban.com/feed/people/你的豆瓣ID/interests")
-pprint.pprint(rss_movietracker) #使用pprint美化打印
+pprint.pprint(rss_movietracker) #使用pprint美化打印进行预览
 ```
 
 
@@ -121,19 +121,9 @@ pprint.pprint(rss_movietracker) #使用pprint美化打印
 
 详见[知乎@无尾羊：notion API命令-个性化再封装](https://zhuanlan.zhihu.com/p/395219868)
 
-
-
-
----
-经过百度之后，我使用的`pprint`和`feedparser`来处理rss链接信息
-```python
-import feedparser
-import pprint
-rss_movietracker = feedparser.parse("https://www.douban.com/feed/people/148064238/interests")
-pprint.pprint(rss_movietracker)
-```
-可以看一下大概的输出，是一个类似于json的文件，其中我们需要的电影的信息都在`entries`里面
-
+输出的是一个类似于json的文件，其中我们需要的电影的信息都在`entries`里面
+1675130569(1).png
+1675130569(1).png
 # 二、处理豆瓣得到的数据
 rss中取得的信息是这样的：如果我们把`rss_movietracker["entries"]`看作一个list，那么这个list当中的每一个item都是我们个人主页（只显示最近看过的）的一个物品，比如看过的每一部电影，想看的每一部电影，看过的每一本图书，所以我们只需要对每个item进行处理，得到我们想要的信息即可。
 
